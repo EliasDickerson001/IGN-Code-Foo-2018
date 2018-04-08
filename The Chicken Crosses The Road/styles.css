@@ -1,0 +1,59 @@
+.header{
+    display: inline-block;
+    margin-left: 50px;
+}
+.instructions{
+    display: inline-block;
+    border-style: solid;
+    padding: 5px;
+    margin-top: 5px;
+    margin-left: 50px;
+    width: 500px;
+}
+#displayArea{
+    position: absolute;
+    top: 26%;
+}
+#solutionsButton{
+    margin-left: 50px;
+    margin-top: 10px;
+}
+#solutions{
+    overflow: auto;
+    height: 500px;
+    width: 500px;
+}
+.coordinate{
+    background-color: rgb(93,93,93);
+    font-size: 20px;
+}
+.grid{
+    position: absolute;
+    top: 30%;
+    /* left: 50%; */
+    left: 505px;
+    /* transform: translateX(-50%); */
+    width: 500px;
+}
+.row{
+    height: 100px;
+}
+.col{
+    border: 1px solid black;
+}
+.start::after{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    font-size: 70px;
+    content: "O";
+}
+.pothole::after{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    font-size: 70px;
+    content: "X";
+}

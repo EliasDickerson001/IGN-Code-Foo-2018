@@ -1,0 +1,227 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.bundle.min.js"></script>
+    <title>The Chicken Crosses The Road</title>
+</head>
+<body>
+    <div class="header">
+        <h1>IGN Code Foo 2018</h1>
+        <h3>The Chicken Crosses the Road</h3>
+        <h5>By Eli Dickerson</h5>
+    </div>
+    <div class="instructions">
+        <strong>Instructions:</strong>
+        <br>
+        Welcome to The Chicken Crosses the Road! Click in the white cells to add your own potholes to the grid. The O is the starting point and 
+        potholes are designated by an X. Click the solutions button to generate all possible paths based on the potholes you've placed in the grid.
+    </div>
+    <br>
+    <button id="solutionsButton">Click Me For Solutions!</button>
+    <div id="displayArea">
+        <h5 id="totalSolutions"></h5>
+        <ul id="solutions"></ul>
+    </div>
+    <div class="container grid">
+        <div class="row">
+            <div class="col coordinate"><!-- 0 of 4 --></div>
+            <div class="col coordinate"><!-- 1 of 4 -->0x</div>
+            <div class="col coordinate"><!-- 2 of 4 -->1x</div>
+            <div class="col coordinate"><!-- 3 of 4 -->2x</div>
+            <div class="col coordinate"><!-- 4 of 4 -->3x</div>
+        </div>
+        <div class="row gridRow">
+            <div class="col coordinate"><!-- 0 of 4 -->0y</div>
+            <div class="col gridCol"><!-- 1 of 4 --></div>
+            <div class="col gridCol"><!-- 2 of 4 --></div>
+            <div class="col gridCol"><!-- 3 of 4 --></div>
+            <div class="col gridCol"><!-- 4 of 4 --></div>
+        </div>
+        <div class="row gridRow">
+            <div class="col coordinate"><!-- 0 of 4 -->1y</div>
+            <div class="col gridCol"><!-- 1 of 4 --></div>
+            <div class="col gridCol"><!-- 2 of 4 --></div>
+            <div class="col gridCol"><!-- 3 of 4 --></div>
+            <div class="col gridCol"><!-- 4 of 4 --></div>
+        </div>
+        <div class="row gridRow">
+            <div class="col coordinate"><!-- 0 of 4 -->2y</div>
+            <div class="col gridCol start"><!-- 1 of 4 --></div>
+            <div class="col gridCol"><!-- 2 of 4 --></div>
+            <div class="col gridCol"><!-- 3 of 4 --></div>
+            <div class="col gridCol"><!-- 4 of 4 --></div>
+        </div>
+        <div class="row gridRow">
+            <div class="col coordinate"><!-- 0 of 4 -->3y</div>
+            <div class="col gridCol"><!-- 1 of 4 --></div>
+            <div class="col gridCol"><!-- 2 of 4 --></div>
+            <div class="col gridCol"><!-- 3 of 4 --></div>
+            <div class="col gridCol"><!-- 4 of 4 --></div>
+        </div>
+    </div>
+    <script>
+        $(document).ready(function() {
+            $(".col").click(function(){
+                if (!$(this).hasClass("start") && !$(this).hasClass("coordinate")) {
+                    $(this).toggleClass("pothole");
+                }
+            });
+            $("button").click(function(){
+                $("#solutions").empty();
+                let builtGrid = BuildGrid();
+                let startPosition = builtGrid[0];
+                let gridMap = builtGrid[1];
+                findPossiblePaths(gridMap[startPosition.row][startPosition.column], gridMap);
+                DisplayTotalSolutions();
+            });
+            function BuildGrid() {
+                let gridMap = [];
+                let gridRow = [];
+                let rowIndex;
+                let colIndex;
+                let startPosition;
+                // Loop through grid to gather elements
+                // gridMap will be indexed by [row][column] - node positions will be indexed by [column][row] like standard (x,y) coordinates
+                $("div.grid").find("*").each(function (index, element){
+                    if (element.classList.contains("gridRow")) {
+                        if (rowIndex === undefined) {
+                            // Initialize indexes for first row
+                            rowIndex = 0;
+                            colIndex = 0;
+                        } else {
+                            gridMap[rowIndex] = gridRow;
+                            // Increment row position, and re-initialize row array every new row.
+                            rowIndex++;
+                            colIndex = 0;
+                            gridRow = [];
+                        }
+                    } else if (element.classList.contains("gridCol")) {
+                        let nodeType;
+                        if (element.classList.contains("pothole")) {
+                            nodeType = "pothole";
+                        } else if (element.classList.contains("start")) {
+                            nodeType = "start";
+                            startPosition = {row : rowIndex, column : colIndex};
+                        } else {
+                            nodeType = "road";
+                        }
+                        gridRow[colIndex] = new gridNode(nodeType, [colIndex, rowIndex]);
+                        colIndex++;
+                    }
+                });
+                // Put last row into grid map, loop does not
+                gridMap[rowIndex] = gridRow;
+                let returnInfo = [startPosition, gridMap]
+                return returnInfo;
+            }
+            function findPossiblePaths (startNode, gridMap, path){
+                //Constants for grabbing node position
+                const col = 0;
+                const row = 1;
+                startNode.visited = true;
+                if (path === undefined) {
+                    path = [startNode.position];
+                } else {
+                    path.push(startNode.position);
+                }
+                //Display solution and return when destination is reached
+                if (startNode.position[col] == (gridMap.length - 1)) {
+                    DisplayPath(path);
+                    // Mark node as unvisited before returning, this will allow for ALL possible paths
+                    let currentNodePosition = path.pop();
+                    gridMap[currentNodePosition[row]][currentNodePosition[col]].visited = false;
+                    return;
+                }
+                let neighbors = getNeighbors(startNode, gridMap);
+                neighbors.forEach(function(currentNode) {
+                    findPossiblePaths(currentNode, gridMap, path);
+                });
+                // Mark node as unvisited before returning, this will allow for ALL possible paths
+                let currentNodePosition = path.pop();
+                gridMap[currentNodePosition[row]][currentNodePosition[col]].visited = false;
+                return;
+            }
+            function getNeighbors(startNode, gridMap){
+                //Constants for grabbing node position
+                const col = 0;
+                const row = 1;
+                // Subtract 1 since arrays are 0 indexed
+                let gridSize = gridMap.length - 1;
+                // Get valid neighbors of starting node
+                let neighbors = [];
+                let upNeighbor;
+                if (!((startNode.position[row] - 1) < 0)) {
+                    let upNeighborPosition = {col:startNode.position[col], row:startNode.position[row] - 1};
+                    upNeighbor = gridMap[upNeighborPosition.row][upNeighborPosition.col];
+                }
+                let rightNeighbor;
+                if (!((startNode.position[col] + 1) > gridSize)) {
+                    let rightNeighborPosition = {col:startNode.position[col] + 1, row: startNode.position[row]};
+                    rightNeighbor = gridMap[rightNeighborPosition.row][rightNeighborPosition.col];
+                }
+                let downNeighbor;
+                if (!((startNode.position[row] + 1) > gridSize)) {
+                    let downNeighborPosition = {col: startNode.position[col], row: startNode.position[row] + 1};
+                    downNeighbor = gridMap[downNeighborPosition.row][downNeighborPosition.col];
+                }
+                // Do not add potholes, nodes out of grid bounds, or visited nodes to neighbors array
+                if (upNeighbor) {
+                    if (!(upNeighbor.isPothole) && !(upNeighbor.visited)) {
+                        neighbors.push(upNeighbor);
+                    }
+                }
+                if (rightNeighbor) {
+                    if (!(rightNeighbor.isPothole) && !(rightNeighbor.visited)) {
+                        neighbors.push(rightNeighbor);
+                    }
+                }
+                if (downNeighbor) {
+                    if (!(downNeighbor.isPothole) && !(downNeighbor.visited)) {
+                        neighbors.push(downNeighbor);
+                    }
+                }
+                return neighbors;
+            }
+            function DisplayPath(path) {
+                let displayPath; 
+                path.forEach(function(coordinate){
+                    if (displayPath == undefined) {
+                        displayPath = ("["+coordinate+"]");
+                    } else {
+                        displayPath += (" ["+coordinate+"]");
+                    }
+                });
+                $("#solutions").append("<li>"+displayPath+"</li>");
+            }
+            function DisplayTotalSolutions() {
+                $("#totalSolutions").empty();
+                let numOfSolutions = $("#solutions li").length;
+                $("#totalSolutions").html("There are "+numOfSolutions+" possible path(s)!");
+            }
+            class gridNode {
+                // Valid nodeType is "start", "pothole", or "road"
+                constructor(nodeType, XYposition){
+                    this.isStart = false;
+                    this.isRoad = false;
+                    this.isPothole = false;
+                    this.visited = false;
+                    this.position = XYposition;
+                    if (nodeType === "start") {
+                        this.isStart = true;
+                    } else if (nodeType === "pothole") {
+                        this.isPothole = true;
+                    } else if (nodeType === "road") {
+                        this.isRoad = true;
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
