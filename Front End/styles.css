@@ -1,0 +1,92 @@
+body{
+    background-color: slategrey;
+}
+.contentArea{
+    max-width: 350px;
+    height: 660px;
+    background-color: white;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 15px;
+}
+.vidArtNav{
+    position: relative;
+    top: 15px;
+    width: 95%;
+    border: 3px solid rgb(196, 54, 60);
+    border-radius: 10px; 
+    list-style-type: none;
+    margin: auto;
+    padding: 0;
+    text-align: center;
+}
+    .vidArtNav li{
+        display: inline;
+        padding: 0px 40px;
+    }
+    @media only screen and (max-width: 320px){
+        .vidArtNav li{
+            padding: 0px 35px;
+        }
+    }
+        .vidArtNav li a{
+            font-size: .9em;
+            font-weight: 600;
+        }
+/* CONSIDER TURNING THIS INTO CLASS FOR BOTH ARTICLE AND VIDEO LISTS */
+#videoList{
+    margin-top: 30px;
+}
+    ul#videoList{
+        height: 535px;
+        /* height: 550px; */
+        overflow: auto;
+    }
+    #videoList li{
+        padding-bottom: 10px;
+        border-bottom: 2px solid rgba(0, 0, 0, .05);
+        margin-bottom: 10px;
+        line-height: .85;
+    }
+    #videoList img{
+        max-width: 150px;
+        /* max-width: 300px; */
+        height: auto;
+    }
+    /* #videoList p{ */
+    #videoList a{
+        color: black;
+        font-size: .75em;
+        font-weight: bold;
+    }
+footer{
+    width: 95%;
+    height: 35px;
+    background-color: rgb(196, 54, 60);
+    margin: auto;
+    padding: 5px 0px;
+    text-align: center;
+    border-radius: 10px;
+}
+footer a{
+    font-size: 1.1em;
+    font-weight: 600;
+}
+.redWhiteBackground{
+    background: linear-gradient(90deg, rgb(196, 54, 60) 50%, rgb(255, 255, 255) 50%);
+}
+.whiteRedBackground{
+    background: linear-gradient(90deg, rgb(255, 255, 255) 50%, rgb(196, 54, 60) 50%);
+}
+.whiteText{
+    color: rgb(255, 255, 255);
+}
+.whiteText:hover{
+    color: rgb(255, 255, 255);
+}
+.redText{
+    color: rgb(196, 54, 60);
+}
+.redText:hover{
+    color: rgb(196, 54, 60);
+}

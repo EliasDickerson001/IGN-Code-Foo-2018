@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.bundle.min.js"></script>
+    <title>IGN Code Foo - Front End</title>
+</head>
+<body>
+    <!-- IGN Container measures 350 x 660 -->
+    <div class="contentArea container-fluid">
+        <nav aria-label="Video Article Navigation">
+            <ul class="vidArtNav redWhiteBackground">
+                <li><a class="whiteText" href="#">VIDEOS</a></li>
+                <li><a class="redText" href="#">ARTICLES</a></li>
+            </ul>
+        </nav>
+        <ul id="videoList" class="list-unstyled">
+            
+        </ul>
+        <!-- <ul id="articleList" class="list-unstyled">
+
+        </ul> -->
+        <footer>
+            <a class="whiteText" href="#">LOAD MORE</a>
+        </footer>
+    </div>
+<script>
+    let apiStartIndex = 0;
+    let apiReturnCount = 10;
+    let videoArrayIndex = 0;
+    let articleArrayIndex = 0;
+    $(document).ready(function() {
+        CallMediaAPI();
+        $(".vidArtNav li a").on("click", function (){
+            // If text is red, the link is not currently selected
+            if ($(this).hasClass("redText")) {
+                $(this).removeClass("redText").addClass("whiteText");
+                $(this).parent().siblings().children().removeClass("whiteText").addClass("redText");
+                $("ul.vidArtNav").toggleClass("whiteRedBackground");
+            }
+        });
+    });
+    function BuildVideoList(videoArray, index) {
+        console.log(videoArray);
+        let videoIdArray = [];
+        videoArray.forEach(function (video) {
+            // console.log(video.thumbnails[0].url);
+            videoIdArray.push(video.contentId);
+            let listObject = '<li class="media">';
+            listObject += '<a href="#"><img class="mr-3" src="'+video.thumbnails[0].url+'" alt="Video Image"></a>';
+            listObject += '<div class="media-body">';
+            // Add contentId to data attribute to div for time since posting and number of comment
+            listObject += '<div class="redText" data-content-id="'+video.contentId+'">'+'</div>';
+            listObject += '<a href="#" class="mt-0 mb-1">'+video.metadata.title+'</a>';
+            listObject += '</div></li>';
+            // console.log(listObject);
+            $("#videoList").append(listObject);
+        })
+        // console.log(videoIdArray);
+    }
+    function CallMediaAPI() {
+        $.ajax({
+            url: "https://ign-apis.herokuapp.com/content?startIndex="+apiStartIndex+"&count="+apiReturnCount,
+            contentType: "application/json; charset=utf-8",
+            dataType: "jsonp",
+            jsonpCallback: "HandleReturnData"
+            // success: function(data){
+            //     console.log(data);
+            // }
+        });
+        apiStartIndex += apiReturnCount;
+    }
+    function GetAge(publishDate){
+
+    }
+</script>
+<script>
+    let videoArray = [];
+    let articleArray = [];
+    const maxIndex = 300;
+    function HandleReturnData(returnData) {
+        // console.log(returnData);
+        let mediaArray = returnData.data;
+        mediaArray.forEach(function(mediaItem){
+            if (mediaItem.metadata.contentType == "video") {
+                videoArray.push(mediaItem);
+            } else if (mediaItem.metadata.contentType == "article") {
+                articleArray.push(mediaItem);
+            }
+        });
+        // console.log(videoArray);
+        // console.log(articleArray);
+        if ((videoArray.length < 5) || (articleArray.length < 5) && !(apiStartIndex > maxIndex)) {
+            CallMediaAPI();
+        }
+        if (videoArray.length >= 5) {
+            BuildVideoList(videoArray);
+        }
+    }
+</script>    
+</body>
+</html>
