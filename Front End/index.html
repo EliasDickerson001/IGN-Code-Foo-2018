@@ -37,11 +37,9 @@
                 $(this).parent().siblings().children().removeClass("whiteText").addClass("redText");
                 $("ul.vidArtNav").toggleClass("whiteRedBackground");
                 if ($(this).is("#videoLink")) {
-                    // $("#videoList").css("display", "initial");
                     $("#videoList").css("display", "block");
                     $("#articleList").css("display", "none");
                 } else if ($(this).is("#articleLink")){
-                    // $("#articleList").css("display", "initial");
                     $("#articleList").css("display", "block");
                     $("#videoList").css("display", "none");
                 }
@@ -60,7 +58,7 @@
         videoArray.forEach(function (video) {
             videoIdArray.push(video.contentId);
             let listObject = '<li class="media">';
-            listObject += '<a href="#"><img src="'+video.thumbnails[0].url+'" alt="Video Image"/>';
+            listObject += '<a href="#" data-toggle="tooltip" title="'+video.metadata.title+'"><img src="'+video.thumbnails[0].url+'" alt="Video Image"/>';
             listObject += '<div class="videoOverlay"><span id="playButton"/><span class="whiteText">'+GetDuration(video.metadata.duration)+'</span></div></a>';
             listObject += '<div class="media-body ml-3">';
             listObject += '<div class="redText">'+GetAge(video.metadata.publishDate)+' - '+'<img src="images/commentBubble.png" alt="Comment Bubble" />';
@@ -76,7 +74,7 @@
         articleArray.forEach(function (article) {
             articleIdArray.push(article.contentId);
             let listObject = '<li class="media">';
-            listObject += '<a href="#"><img src="'+article.thumbnails[0].url+'" alt="Article Image"/></a>';
+            listObject += '<a href="#" data-toggle="tooltip" title="'+article.metadata.title+'"><img src="'+article.thumbnails[0].url+'" alt="Article Image"/></a>';
             listObject += '<div class="media-body ml-3">';
             listObject += '<div class="redText">'+GetAge(article.metadata.publishDate)+' - '+'<img src="images/commentBubble.png" alt="Comment Bubble" />';
             listObject += '<span class="commentCount" data-content-id="'+article.contentId+'"/></div>';
@@ -111,6 +109,7 @@
             jsonpCallback: "Handle"+videoOrArticle+"CommentData"
         });
     }
+    // Get time since publish
     function GetAge(publishDate){
         let publishAge = Date.now() - Date.parse(publishDate);
         let seconds = (publishAge / 1000).toFixed(); 
@@ -127,6 +126,7 @@
             return days+"d"
         }
     }
+    // Get length of video
     function GetDuration(duration) {
         let hours = Math.floor((duration / (60 * 60)));
         if (hours) {
@@ -172,6 +172,7 @@
             BuildArticleList(articleArray);
         }
     }
+    // Loop through video list to add comment count to appropriate item
     function HandleVideoCommentData(returnData) {
         let commentArray = returnData.content;
         $("ul#videoList").find("span.commentCount").each(function (index, span) {
@@ -184,11 +185,12 @@
             }
         });
     }
+    // Loop through article list to add comment count to appropriate item
     function HandleArticleCommentData(returnData) {
         let commentArray = returnData.content;
         $("ul#articleList").find("span.commentCount").each(function (index, span) {
             for (let position = 0; position < commentArray.length; position++) {
-                // dataset object converts hyphens in data attribute to camelCase
+                // dataset object converts hyphens in data-* attribute to camelCase
                 if (commentArray[position].id == span.dataset.contentId) {
                     $(span).append(" "+commentArray[position].count);
                     break;
