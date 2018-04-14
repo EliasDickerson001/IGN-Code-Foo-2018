@@ -3,7 +3,8 @@ body{
 }
 .contentArea{
     max-width: 350px;
-    height: 660px;
+    height: auto;
+    /* height: 660px; */
     background-color: white;
     margin-left: auto;
     margin-right: auto;
@@ -16,7 +17,9 @@ body{
     border: 3px solid rgb(196, 54, 60);
     border-radius: 10px; 
     list-style-type: none;
-    margin: auto;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 30px;
     padding: 0;
     text-align: center;
 }
@@ -24,54 +27,99 @@ body{
         display: inline;
         padding: 0px 40px;
     }
-    @media only screen and (max-width: 320px){
-        .vidArtNav li{
-            padding: 0px 35px;
-        }
-    }
         .vidArtNav li a{
             font-size: .9em;
             font-weight: 600;
         }
-/* CONSIDER TURNING THIS INTO CLASS FOR BOTH ARTICLE AND VIDEO LISTS */
-#videoList{
-    margin-top: 30px;
+            @media only screen and (max-width: 330px){
+                .vidArtNav li{
+                    padding: 0px 35px;
+                }
+            }
+            @media only screen and (max-width: 305px){
+                .vidArtNav li{
+                    padding: 0px 25px;
+                }
+            }
+            @media only screen and (max-width: 263px){
+                .vidArtNav li{
+                    padding: 0px 15px;
+                }
+            }
+#articleList{
+    display: none;
 }
-    ul#videoList{
+.mediaList{
+    margin-top: 30px;
+    position: relative;
+}
+    ul.mediaList{
         height: 535px;
-        /* height: 550px; */
         overflow: auto;
     }
-    #videoList li{
+    .mediaList li{
         padding-bottom: 10px;
         border-bottom: 2px solid rgba(0, 0, 0, .05);
         margin-bottom: 10px;
         line-height: .85;
     }
-    #videoList img{
+    .mediaList img{
         max-width: 150px;
-        /* max-width: 300px; */
         height: auto;
     }
-    /* #videoList p{ */
-    #videoList a{
-        color: black;
-        font-size: .75em;
-        font-weight: bold;
-    }
+        .mediaList div.videoOverlay{
+            position: absolute;
+            display: inline-block;
+            padding-top: 5px;
+            padding-right: 1px;
+            padding-left: 5px;
+            background-color: rgb(196, 54, 60);
+            width: 60px;
+            height: 25px;
+            transform: translate(-9.2em, 3.5em);
+        }
+        .mediaList a.blackText{
+            color: black;
+            font-size: .75em;
+            font-weight: bold;
+        }
+            .mediaList li.media div.redText{
+                font-size: .7em;
+            }
+            .mediaList li.media div.redText img{
+                height: 1em;
+                width: 1em;
+            }
+            .mediaList div.videoOverlay span.whiteText{
+                font-size: .7em;
+                font-weight: 500;
+                position: absolute;
+                transform: translate(3px, 2.5px);
+            }
+            .mediaList div.videoOverlay span#playButton::before{
+                background-repeat: no-repeat;
+                background-image: url("images/playButton.png");
+                background-size: 15px 15px;
+                display: inline-block;
+                width: 15px; 
+                height: 15px;
+                content: "";
+            }
 footer{
     width: 95%;
-    height: 35px;
+    position: relative;
+    bottom: 10px;
+    height: auto;
     background-color: rgb(196, 54, 60);
     margin: auto;
     padding: 5px 0px;
     text-align: center;
     border-radius: 10px;
 }
-footer a{
-    font-size: 1.1em;
-    font-weight: 600;
-}
+    footer a{
+        font-size: 1.1em;
+        font-weight: 600;
+    }
 .redWhiteBackground{
     background: linear-gradient(90deg, rgb(196, 54, 60) 50%, rgb(255, 255, 255) 50%);
 }
@@ -81,12 +129,12 @@ footer a{
 .whiteText{
     color: rgb(255, 255, 255);
 }
-.whiteText:hover{
-    color: rgb(255, 255, 255);
-}
+    .whiteText:hover{
+        color: rgb(255, 255, 255);
+    }
 .redText{
     color: rgb(196, 54, 60);
 }
-.redText:hover{
-    color: rgb(196, 54, 60);
-}
+    .redText:hover{
+        color: rgb(196, 54, 60);
+    }

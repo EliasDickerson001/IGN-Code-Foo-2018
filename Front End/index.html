@@ -10,29 +10,24 @@
     <title>IGN Code Foo - Front End</title>
 </head>
 <body>
-    <!-- IGN Container measures 350 x 660 -->
     <div class="contentArea container-fluid">
         <nav aria-label="Video Article Navigation">
             <ul class="vidArtNav redWhiteBackground">
-                <li><a class="whiteText" href="#">VIDEOS</a></li>
-                <li><a class="redText" href="#">ARTICLES</a></li>
+                <li><a id="videoLink" class="whiteText" href="#">VIDEOS</a></li>
+                <li><a id="articleLink" class="redText" href="#">ARTICLES</a></li>
             </ul>
         </nav>
-        <ul id="videoList" class="list-unstyled">
-            
+        <ul id="videoList" class="list-unstyled mediaList">
         </ul>
-        <!-- <ul id="articleList" class="list-unstyled">
-
-        </ul> -->
+        <ul id="articleList" class="list-unstyled mediaList">
+        </ul>
         <footer>
-            <a class="whiteText" href="#">LOAD MORE</a>
+            <a id="loadButton" class="whiteText" href="#">LOAD MORE</a>
         </footer>
     </div>
 <script>
     let apiStartIndex = 0;
     let apiReturnCount = 10;
-    let videoArrayIndex = 0;
-    let articleArrayIndex = 0;
     $(document).ready(function() {
         CallMediaAPI();
         $(".vidArtNav li a").on("click", function (){
@@ -41,50 +36,124 @@
                 $(this).removeClass("redText").addClass("whiteText");
                 $(this).parent().siblings().children().removeClass("whiteText").addClass("redText");
                 $("ul.vidArtNav").toggleClass("whiteRedBackground");
+                if ($(this).is("#videoLink")) {
+                    // $("#videoList").css("display", "initial");
+                    $("#videoList").css("display", "block");
+                    $("#articleList").css("display", "none");
+                } else if ($(this).is("#articleLink")){
+                    // $("#articleList").css("display", "initial");
+                    $("#articleList").css("display", "block");
+                    $("#videoList").css("display", "none");
+                }
+            }
+        });
+        $("#loadButton").on("click", function (){
+            if (!(apiStartIndex > maxIndex)) {
+                CallMediaAPI();
+            } else {
+                window.alert("End of Content!");
             }
         });
     });
-    function BuildVideoList(videoArray, index) {
-        console.log(videoArray);
+    function BuildVideoList(videoArray) {
         let videoIdArray = [];
         videoArray.forEach(function (video) {
-            // console.log(video.thumbnails[0].url);
             videoIdArray.push(video.contentId);
             let listObject = '<li class="media">';
-            listObject += '<a href="#"><img class="mr-3" src="'+video.thumbnails[0].url+'" alt="Video Image"></a>';
-            listObject += '<div class="media-body">';
-            // Add contentId to data attribute to div for time since posting and number of comment
-            listObject += '<div class="redText" data-content-id="'+video.contentId+'">'+'</div>';
-            listObject += '<a href="#" class="mt-0 mb-1">'+video.metadata.title+'</a>';
+            listObject += '<a href="#"><img src="'+video.thumbnails[0].url+'" alt="Video Image"/>';
+            listObject += '<div class="videoOverlay"><span id="playButton"/><span class="whiteText">'+GetDuration(video.metadata.duration)+'</span></div></a>';
+            listObject += '<div class="media-body ml-3">';
+            listObject += '<div class="redText">'+GetAge(video.metadata.publishDate)+' - '+'<img src="images/commentBubble.png" alt="Comment Bubble" />';
+            listObject += '<span class="commentCount" data-content-id="'+video.contentId+'"/></div>';
+            listObject += '<a href="#" class="mt-0 mb-1 blackText">'+video.metadata.title+'</a>';
             listObject += '</div></li>';
-            // console.log(listObject);
             $("#videoList").append(listObject);
         })
-        // console.log(videoIdArray);
+        CallCommentAPI(videoIdArray, "Video");
+    }
+    function BuildArticleList(articleArray){
+        let articleIdArray = [];
+        articleArray.forEach(function (article) {
+            articleIdArray.push(article.contentId);
+            let listObject = '<li class="media">';
+            listObject += '<a href="#"><img src="'+article.thumbnails[0].url+'" alt="Article Image"/></a>';
+            listObject += '<div class="media-body ml-3">';
+            listObject += '<div class="redText">'+GetAge(article.metadata.publishDate)+' - '+'<img src="images/commentBubble.png" alt="Comment Bubble" />';
+            listObject += '<span class="commentCount" data-content-id="'+article.contentId+'"/></div>';
+            listObject += '<a href="#" class="mt-0 mb-1 blackText">'+article.metadata.title+'</a>';
+            listObject += '</div></li>';
+            $("#articleList").append(listObject);
+        })
+        CallCommentAPI(articleIdArray, "Article");
     }
     function CallMediaAPI() {
         $.ajax({
             url: "https://ign-apis.herokuapp.com/content?startIndex="+apiStartIndex+"&count="+apiReturnCount,
             contentType: "application/json; charset=utf-8",
             dataType: "jsonp",
-            jsonpCallback: "HandleReturnData"
-            // success: function(data){
-            //     console.log(data);
-            // }
+            jsonpCallback: "HandleMediaData"
         });
         apiStartIndex += apiReturnCount;
     }
+    function CallCommentAPI(idArray, videoOrArticle) {
+        let idQueryString;
+        idArray.forEach(function (id) {
+            if (idQueryString === undefined) {
+                idQueryString = id;
+            } else {
+                idQueryString += ","+id
+            }
+        })
+        $.ajax({
+            url: "https://ign-apis.herokuapp.com/comments?ids="+idQueryString,
+            contentType: "application/json; charset=utf-8",
+            dataType: "jsonp",
+            jsonpCallback: "Handle"+videoOrArticle+"CommentData"
+        });
+    }
     function GetAge(publishDate){
-
+        let publishAge = Date.now() - Date.parse(publishDate);
+        let seconds = (publishAge / 1000).toFixed(); 
+        let minutes = (publishAge / (1000 * 60)).toFixed(); 
+        let hours = (publishAge / (1000 * 60 * 60)).toFixed(); 
+        let days  = (publishAge / (1000 * 60 * 60 * 24)).toFixed(); 
+        if (seconds < 60) {
+            return seconds+"s"
+        } else if (minutes < 60) {
+            return minutes+"m"
+        } else if (hours < 24) {
+            return hours+"h"
+        } else {
+            return days+"d"
+        }
+    }
+    function GetDuration(duration) {
+        let hours = Math.floor((duration / (60 * 60)));
+        if (hours) {
+            duration -= (hours * (60 * 60));
+        }
+        let minutes = Math.floor((duration / 60));
+        let seconds = (duration % 60);
+        if (seconds == 0) {
+            seconds = "00";
+        } else if (seconds.toString().length == 1){
+            seconds = ("0"+seconds);
+        }
+        if (!(hours == 0)) {
+            return "  "+hours+":"+minutes+":"+seconds;
+        } else if (!(minutes == 0)){
+            return "  "+minutes+":"+seconds;
+        } else {
+            return "  0:"+seconds;
+        }
     }
 </script>
 <script>
-    let videoArray = [];
-    let articleArray = [];
     const maxIndex = 300;
-    function HandleReturnData(returnData) {
-        // console.log(returnData);
+    function HandleMediaData(returnData) {
         let mediaArray = returnData.data;
+        let videoArray = [];
+        let articleArray = [];
         mediaArray.forEach(function(mediaItem){
             if (mediaItem.metadata.contentType == "video") {
                 videoArray.push(mediaItem);
@@ -92,14 +161,40 @@
                 articleArray.push(mediaItem);
             }
         });
-        // console.log(videoArray);
-        // console.log(articleArray);
+        // We will initialize the video/article panes with 5 media objects each
         if ((videoArray.length < 5) || (articleArray.length < 5) && !(apiStartIndex > maxIndex)) {
             CallMediaAPI();
         }
         if (videoArray.length >= 5) {
             BuildVideoList(videoArray);
         }
+        if (articleArray.length >= 5) {
+            BuildArticleList(articleArray);
+        }
+    }
+    function HandleVideoCommentData(returnData) {
+        let commentArray = returnData.content;
+        $("ul#videoList").find("span.commentCount").each(function (index, span) {
+            for (let position = 0; position < commentArray.length; position++) {
+                // dataset object converts hyphens in data attribute to camelCase
+                if (commentArray[position].id == span.dataset.contentId) {
+                    $(span).append(" "+commentArray[position].count);
+                    break;
+                }
+            }
+        });
+    }
+    function HandleArticleCommentData(returnData) {
+        let commentArray = returnData.content;
+        $("ul#articleList").find("span.commentCount").each(function (index, span) {
+            for (let position = 0; position < commentArray.length; position++) {
+                // dataset object converts hyphens in data attribute to camelCase
+                if (commentArray[position].id == span.dataset.contentId) {
+                    $(span).append(" "+commentArray[position].count);
+                    break;
+                }
+            }
+        });
     }
 </script>    
 </body>
