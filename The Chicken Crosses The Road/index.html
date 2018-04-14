@@ -11,58 +11,62 @@
     <title>The Chicken Crosses The Road</title>
 </head>
 <body>
-    <div class="header">
-        <h1>IGN Code Foo 2018</h1>
-        <h3>The Chicken Crosses the Road</h3>
-        <h5>By Eli Dickerson</h5>
-    </div>
-    <div class="instructions">
-        <strong>Instructions:</strong>
+    <div class="container-fluid">
+        <div class="header">
+            <h1>IGN Code Foo 2018</h1>
+            <h3>The Chicken Crosses the Road</h3>
+            <h5>By Eli Dickerson</h5>
+        </div>
+        <div class="instructions">
+            <strong>Instructions:</strong>
+            <br>
+            Welcome to The Chicken Crosses the Road! Click in the empty cells to add your own potholes to the grid. The O is the starting point and 
+            potholes are designated by an X. Click the solutions button to generate all possible paths based on the potholes you've placed in the grid.
+        </div>
         <br>
-        Welcome to The Chicken Crosses the Road! Click in the white cells to add your own potholes to the grid. The O is the starting point and 
-        potholes are designated by an X. Click the solutions button to generate all possible paths based on the potholes you've placed in the grid.
-    </div>
-    <br>
-    <button id="solutionsButton">Click Me For Solutions!</button>
-    <div id="displayArea">
-        <h5 id="totalSolutions"></h5>
-        <ul id="solutions"></ul>
-    </div>
-    <div class="container grid">
-        <div class="row">
-            <div class="col coordinate"><!-- 0 of 4 --></div>
-            <div class="col coordinate"><!-- 1 of 4 -->0x</div>
-            <div class="col coordinate"><!-- 2 of 4 -->1x</div>
-            <div class="col coordinate"><!-- 3 of 4 -->2x</div>
-            <div class="col coordinate"><!-- 4 of 4 -->3x</div>
-        </div>
-        <div class="row gridRow">
-            <div class="col coordinate"><!-- 0 of 4 -->0y</div>
-            <div class="col gridCol"><!-- 1 of 4 --></div>
-            <div class="col gridCol"><!-- 2 of 4 --></div>
-            <div class="col gridCol"><!-- 3 of 4 --></div>
-            <div class="col gridCol"><!-- 4 of 4 --></div>
-        </div>
-        <div class="row gridRow">
-            <div class="col coordinate"><!-- 0 of 4 -->1y</div>
-            <div class="col gridCol"><!-- 1 of 4 --></div>
-            <div class="col gridCol"><!-- 2 of 4 --></div>
-            <div class="col gridCol"><!-- 3 of 4 --></div>
-            <div class="col gridCol"><!-- 4 of 4 --></div>
-        </div>
-        <div class="row gridRow">
-            <div class="col coordinate"><!-- 0 of 4 -->2y</div>
-            <div class="col gridCol start"><!-- 1 of 4 --></div>
-            <div class="col gridCol"><!-- 2 of 4 --></div>
-            <div class="col gridCol"><!-- 3 of 4 --></div>
-            <div class="col gridCol"><!-- 4 of 4 --></div>
-        </div>
-        <div class="row gridRow">
-            <div class="col coordinate"><!-- 0 of 4 -->3y</div>
-            <div class="col gridCol"><!-- 1 of 4 --></div>
-            <div class="col gridCol"><!-- 2 of 4 --></div>
-            <div class="col gridCol"><!-- 3 of 4 --></div>
-            <div class="col gridCol"><!-- 4 of 4 --></div>
+        <button id="solutionsButton">Click Me For Solutions!</button>
+        <div class="mainContent">
+            <div id="displayArea">
+                <h5 id="totalSolutions"></h5>
+                <ul id="solutions"></ul>
+            </div>
+            <div class="container grid">
+                <div class="row">
+                    <div class="col coordinate"><!-- 0 of 4 --></div>
+                    <div class="col coordinate"><!-- 1 of 4 -->0x</div>
+                    <div class="col coordinate"><!-- 2 of 4 -->1x</div>
+                    <div class="col coordinate"><!-- 3 of 4 -->2x</div>
+                    <div class="col coordinate"><!-- 4 of 4 -->3x</div>
+                </div>
+                <div class="row gridRow">
+                    <div class="col coordinate"><!-- 0 of 4 -->0y</div>
+                    <div class="col gridCol"><!-- 1 of 4 --></div>
+                    <div class="col gridCol"><!-- 2 of 4 --></div>
+                    <div class="col gridCol"><!-- 3 of 4 --></div>
+                    <div class="col gridCol"><!-- 4 of 4 --></div>
+                </div>
+                <div class="row gridRow">
+                    <div class="col coordinate"><!-- 0 of 4 -->1y</div>
+                    <div class="col gridCol"><!-- 1 of 4 --></div>
+                    <div class="col gridCol"><!-- 2 of 4 --></div>
+                    <div class="col gridCol"><!-- 3 of 4 --></div>
+                    <div class="col gridCol"><!-- 4 of 4 --></div>
+                </div>
+                <div class="row gridRow">
+                    <div class="col coordinate"><!-- 0 of 4 -->2y</div>
+                    <div class="col gridCol start"><!-- 1 of 4 --></div>
+                    <div class="col gridCol"><!-- 2 of 4 --></div>
+                    <div class="col gridCol"><!-- 3 of 4 --></div>
+                    <div class="col gridCol"><!-- 4 of 4 --></div>
+                </div>
+                <div class="row gridRow">
+                    <div class="col coordinate"><!-- 0 of 4 -->3y</div>
+                    <div class="col gridCol"><!-- 1 of 4 --></div>
+                    <div class="col gridCol"><!-- 2 of 4 --></div>
+                    <div class="col gridCol"><!-- 3 of 4 --></div>
+                    <div class="col gridCol"><!-- 4 of 4 --></div>
+                </div>
+            </div>
         </div>
     </div>
     <script>
