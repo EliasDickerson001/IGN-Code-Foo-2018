@@ -58,7 +58,7 @@
         videoArray.forEach(function (video) {
             videoIdArray.push(video.contentId);
             let listObject = '<li class="media">';
-            listObject += '<a href="#" data-toggle="tooltip" title="'+video.metadata.title+'"><img src="'+video.thumbnails[0].url+'" alt="Video Image"/>';
+            listObject += '<a class="highlight" href="#" data-toggle="tooltip" title="'+video.metadata.title+'"><img src="'+video.thumbnails[0].url+'" alt="Video Image"/>';
             listObject += '<div class="videoOverlay"><span id="playButton"/><span class="whiteText">'+GetDuration(video.metadata.duration)+'</span></div></a>';
             listObject += '<div class="media-body ml-3">';
             listObject += '<div class="redText">'+GetAge(video.metadata.publishDate)+' - '+'<img src="images/commentBubble.png" alt="Comment Bubble" />';
@@ -74,7 +74,7 @@
         articleArray.forEach(function (article) {
             articleIdArray.push(article.contentId);
             let listObject = '<li class="media">';
-            listObject += '<a href="#" data-toggle="tooltip" title="'+article.metadata.title+'"><img src="'+article.thumbnails[0].url+'" alt="Article Image"/></a>';
+            listObject += '<a class="highlight" href="#" data-toggle="tooltip" title="'+article.metadata.title+'"><img src="'+article.thumbnails[0].url+'" alt="Article Image"/></a>';
             listObject += '<div class="media-body ml-3">';
             listObject += '<div class="redText">'+GetAge(article.metadata.publishDate)+' - '+'<img src="images/commentBubble.png" alt="Comment Bubble" />';
             listObject += '<span class="commentCount" data-content-id="'+article.contentId+'"/></div>';

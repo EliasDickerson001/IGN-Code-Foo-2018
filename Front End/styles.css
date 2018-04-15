@@ -82,6 +82,12 @@ body{
             font-size: .75em;
             font-weight: bold;
         }
+            .mediaList li.media a.highlight{
+                background-color: white;
+            }
+                .mediaList li.media a.highlight:hover{
+                    opacity: .6;
+                }
             .mediaList li.media div.redText{
                 font-size: .7em;
             }
