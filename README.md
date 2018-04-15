@@ -3,7 +3,7 @@ Repo for IGN's Code Foo 2018 Application
 
 [Link to Eli Dickerson's Introduction] (https://www.dropbox.com/s/z4qikkae1dgscqi/Pick%20Eli%20Dickerson%20for%20IGN%20Code%20Foo%202018.docx?dl=0)
 
-[Link to Building the Eiffel Tower with Geomags] (https://www.dropbox.com/s/hbntnh412ie63kc/Building%20the%20Eiffel%20Tower%20With%20Geomags.docx?dl=0)
+[Link to Building the Eiffel Tower with Geomags] (https://www.dropbox.com/s/yy4ucclpux6o0my/Building%20the%20Eiffel%20Tower%20With%20Geomags.docx?dl=0)
 
 ## [The Chicken Crosses the Road] (https://github.com/EliasDickerson001/IGN-Code-Foo-2018/tree/master/The%20Chicken%20Crosses%20The%20Road)
 
